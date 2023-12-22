@@ -19,11 +19,11 @@ class User {
         return password;
     }
 
-    public List<Order> getOrderHistory() {
-        return orderHistory;
-    }
-
     public void addOrderToHistory(Order order) {
         orderHistory.add(order);
+    }
+
+    public List<Order> getOrderHistory() {
+        return orderHistory;
     }
 }
