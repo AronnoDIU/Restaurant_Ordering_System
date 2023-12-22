@@ -11,7 +11,7 @@ class Order {
     public double calculateTotal() {
         double total = 0;
         for (Map.Entry<MenuItem, Integer> entry : items.entrySet()) {
-            total += entry.getKey().getPrice() * entry.getValue();
+            total += entry.getKey().price() * entry.getValue();
         }
         return total;
     }
@@ -19,7 +19,7 @@ class Order {
     public void displayOrderSummary() {
         System.out.println("Order Summary:");
         for (Map.Entry<MenuItem, Integer> entry : items.entrySet()) {
-            System.out.println(entry.getKey().getName() + " x" + entry.getValue() + " - $" + entry.getKey().getPrice() * entry.getValue());
+            System.out.println(entry.getKey().name() + " x" + entry.getValue() + " - $" + entry.getKey().price() * entry.getValue());
         }
         System.out.println("Total: $" + calculateTotal());
     }
