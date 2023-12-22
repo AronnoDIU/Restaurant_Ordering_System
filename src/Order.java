@@ -10,7 +10,7 @@ class Order {
     public double calculateTotal() {
         double total = 0;
         for (MenuItem item : items) {
-            total += item.getPrice();
+            total += item.price();
         }
         return total;
     }
@@ -18,7 +18,7 @@ class Order {
     public void displayOrderSummary() {
         System.out.println("Order Summary:");
         for (MenuItem item : items) {
-            System.out.println(item.getName() + " - $" + item.getPrice());
+            System.out.println(item.name() + " - $" + item.price());
         }
         System.out.println("Total: $" + calculateTotal());
     }
