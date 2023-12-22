@@ -1,36 +1,118 @@
+import java.io.*;
 import java.util.*;
 
 public class RestaurantOrderingSystem {
     private static final Map<Integer, MenuItem> menu = new HashMap<>();
-    private static final Map<String, User> users = new HashMap<>();
+    private static final Order currentOrder = new Order();
     private static User currentUser;
 
     public static void main(String[] args) {
-        initializeMenu();
-        initializeUsers();
+        loadMenu(); // Load menu from file
+        displayMenu();
 
         Scanner userInput = new Scanner(System.in);
 
-        // User Authentication
-        authenticateUser(userInput);
+        while (true) {
+            System.out.println("Choose an option:");
+            System.out.println("1. Login");
+            System.out.println("2. Sign Up");
+            System.out.println("3. Continue as Guest");
+            System.out.println("4. Exit");
 
-        // Display Menu
-        displayMenu();
+            int option = userInput.nextInt();
 
-        // Place Order
-        Order currentOrder = placeOrder(userInput);
+            switch (option) {
+                case 1:
+                    loginUser(userInput);
+                    break;
+                case 2:
+                    signUpUser(userInput);
+                    break;
+                case 3:
+                    placeOrder(userInput);
+                    break;
+                case 4:
+                    saveOrderToFile();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
 
-        // Display Order Summary
+            placeOrder(userInput);
+        }
+    }
+
+    private static void loginUser(Scanner scanner) {
+        System.out.println("Enter username: ");
+        String username = scanner.next();
+        System.out.println("Enter password: ");
+        String password = scanner.next();
+
+        currentUser = UserManager.loginUser(username, password);
+    }
+
+    private static void signUpUser(Scanner scanner) {
+        System.out.println("Enter a new username: ");
+        String username = scanner.next();
+        System.out.println("Enter a password: ");
+        String password = scanner.next();
+
+        UserManager.addUser(username, password);
+    }
+
+    private static void placeOrder(Scanner scanner) {
+        while (true) {
+            System.out.println("Enter item number to add to the order (0 to finish and view order): ");
+            int choice = scanner.nextInt();
+
+            if (choice == 0) {
+                break;
+            }
+
+            MenuItem selectedItem = menu.get(choice);
+            if (selectedItem != null) {
+                currentOrder.addItem(selectedItem);
+                System.out.println(selectedItem.getName() + " added to the order.");
+            } else {
+                System.out.println("Invalid item number. Please try again.");
+            }
+        }
+
+        if (currentUser != null) {
+            currentUser.addOrderToHistory(currentOrder);
+        }
+
         currentOrder.displayOrderSummary();
+    }
 
-        // Update User Order History
-        updateUserOrderHistory(currentOrder);
+    private static void loadMenu() {
+        // Load menu from a file (e.g., menu.txt)
+        try (BufferedReader reader = new BufferedReader(new FileReader("menu.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int itemNumber = Integer.parseInt(parts[0]);
+                String itemName = parts[1];
+                double itemPrice = Double.parseDouble(parts[2]);
+                menu.put(itemNumber, new MenuItem(itemName, itemPrice));
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading menu: " + e.getMessage());
+        }
+    }
 
-        // Display Order History
-        displayOrderHistory();
-
-        // Close Scanner
-        userInput.close();
+    private static void saveOrderToFile() {
+        // Save the current order to a file (e.g., orders.txt)
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("orders.txt", true))) {
+            writer.write("Order Summary for " + (currentUser != null ? currentUser.getUsername() : "Guest") + ":\n");
+            for (MenuItem item : currentOrder.getItems()) {
+                writer.write(item.getName() + " - $" + item.getPrice() + "\n");
+            }
+            writer.write("Total: $" + currentOrder.calculateTotal() + "\n");
+            writer.write("----------------------------\n");
+        } catch (IOException e) {
+            System.out.println("Error saving order: " + e.getMessage());
+        }
     }
 
     private static void authenticateUser(Scanner scanner) {
@@ -86,19 +168,19 @@ public class RestaurantOrderingSystem {
         menu.put(10, new MenuItem("Water", 0.00));
     }
 
-    private static void initializeUsers() {
-        User user1 = new User("user1", "pass1");
-        User user2 = new User("user2", "pass2");
-        User user3 = new User("user3", "pass3");
-        User user4 = new User("user4", "pass4");
-        User user5 = new User("user5", "pass5");
-
-        users.put(user1.getUsername(), user1);
-        users.put(user2.getUsername(), user2);
-        users.put(user3.getUsername(), user3);
-        users.put(user4.getUsername(), user4);
-        users.put(user5.getUsername(), user5);
-    }
+//    private static void initializeUsers() {
+//        User user1 = new User("user1", "pass1");
+//        User user2 = new User("user2", "pass2");
+//        User user3 = new User("user3", "pass3");
+//        User user4 = new User("user4", "pass4");
+//        User user5 = new User("user5", "pass5");
+//
+//        users.put(user1.getUsername(), user1);
+//        users.put(user2.getUsername(), user2);
+//        users.put(user3.getUsername(), user3);
+//        users.put(user4.getUsername(), user4);
+//        users.put(user5.getUsername(), user5);
+//    }
 
     private static void displayMenu() {
         System.out.println("Menu:");
@@ -109,34 +191,34 @@ public class RestaurantOrderingSystem {
         }
     }
 
-    private static Order placeOrder(Scanner userInput) {
-        Order order = new Order();
-
-        while (true) {
-            System.out.println("Enter item number to add to the order " +
-                    "(0 to finish and view order): ");
-            int choice = userInput.nextInt();
-
-            if (choice == 0) {
-                break;
-            }
-
-            MenuItem selectedItem = menu.get(choice);
-
-            if (selectedItem != null) {
-                System.out.print("Enter quantity: ");
-                int quantity = userInput.nextInt();
-                OrderItem orderItem = new OrderItem(selectedItem, quantity);
-                order.addItem(orderItem);
-                System.out.println(orderItem.quantity()
-                        + "x " + selectedItem.name() + " added to the order.");
-            } else {
-                System.out.println("Invalid item number. Please try again.");
-            }
-        }
-
-        return order;
-    }
+//    private static Order placeOrder(Scanner userInput) {
+//        Order order = new Order();
+//
+//        while (true) {
+//            System.out.println("Enter item number to add to the order " +
+//                    "(0 to finish and view order): ");
+//            int choice = userInput.nextInt();
+//
+//            if (choice == 0) {
+//                break;
+//            }
+//
+//            MenuItem selectedItem = menu.get(choice);
+//
+//            if (selectedItem != null) {
+//                System.out.print("Enter quantity: ");
+//                int quantity = userInput.nextInt();
+//                OrderItem orderItem = new OrderItem(selectedItem, quantity);
+//                order.addItem(orderItem);
+//                System.out.println(orderItem.quantity()
+//                        + "x " + selectedItem.name() + " added to the order.");
+//            } else {
+//                System.out.println("Invalid item number. Please try again.");
+//            }
+//        }
+//
+//        return order;
+//    }
 
     private static void updateUserOrderHistory(Order order) {
         currentUser.addOrderToHistory(order);
