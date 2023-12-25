@@ -37,6 +37,16 @@ restaurant staff manage those orders efficiently.
 2. Navigate to the repository directory: `cd restaurant-ordering-system`
 3. Run the server: `java -jar server.jar`
 
+## Key Features
+
+- User Authentication and Authorization (Login/Sign Up)
+- Dynamic menu management (Add, Remove, Update menu items)
+- Order management (Place, Cancel, View order history)
+- User profile management (View, Edit profile)
+- Data persistence using serialization and deserialization
+- Data validation and error handling (Input validation, Exception handling)
+- Clean and modular Java codebase
+
 ## Contributing
 
 Contributions are welcome! If you would like to contribute to the Restaurant Ordering System, please follow these steps:
