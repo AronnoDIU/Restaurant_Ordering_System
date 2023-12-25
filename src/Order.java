@@ -1,6 +1,9 @@
+import java.io.Serial;
 import java.util.ArrayList;
 
-class Order {
+class Order implements java.io.Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     static int orderIdCounter = 1;
     int orderId;
     ArrayList<OrderItem> items;

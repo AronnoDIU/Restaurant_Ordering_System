@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RestaurantOS {
+public class RestaurantSystem {
     static ArrayList<MenuItem> menu = new ArrayList<>();
     static ArrayList<User> users = new ArrayList<>();
     static ArrayList<Order> orders = new ArrayList<>();
@@ -40,6 +40,7 @@ public class RestaurantOS {
         int choice;
 
         do {
+            System.out.println("Welcome to the Restaurant Ordering System!");
             System.out.println("1. Login");
             System.out.println("2. Sign Up");
             System.out.println("3. Exit");
@@ -101,10 +102,15 @@ public class RestaurantOS {
         int choice;
 
         do {
-            System.out.println("1. Display Menu");
+            System.out.println("Welcome to the Restaurant Ordering System! What would you like to do?");
+            System.out.println("1. Display Menu Items");
             System.out.println("2. Place Order");
             System.out.println("3. View Order History");
-            System.out.println("4. Logout");
+            System.out.println("4. Add/Remove/Update Menu Items");
+            System.out.println("5. Remove Menu Item");
+            System.out.println("6. Update Menu Item Price");
+            System.out.println("7. Back to Main Menu");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
 
@@ -119,8 +125,19 @@ public class RestaurantOS {
                     viewOrderHistory();
                     break;
                 case 4:
-                    currentUser = null;
-                    System.out.println("Logged out successfully.");
+                    addMenuItem();
+                    break;
+                case 5:
+                    removeMenuItem();
+                    break;
+                case 6:
+                    updateMenuItemPrice();
+                    break;
+                case 7:
+                    showWelcomeMenu();
+                    break;
+                case 8:
+                    System.out.println("Exiting the system. Goodbye!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -160,6 +177,10 @@ public class RestaurantOS {
         } while (choice != 0);
 
         orders.add(order);
+        currentUser.orders.add(order);
+
+        saveOrders();
+        saveUsers();
         System.out.println("Order placed successfully!");
     }
 
@@ -193,7 +214,7 @@ public class RestaurantOS {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(MENU_FILE))) {
             menu = (ArrayList<MenuItem>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            // Handle exceptions or initialize menu if the file is not found
+            // Handle exceptions or initialize a menu if the file is not found
             initializeMenu();
         }
     }
@@ -232,39 +253,6 @@ public class RestaurantOS {
         }
     }
 
-    public static void changeMenu() {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-
-        do {
-            System.out.println("Menu Management:");
-            System.out.println("1. Add Menu Item");
-            System.out.println("2. Remove Menu Item");
-            System.out.println("3. Update Menu Item Price");
-            System.out.println("4. Back to Main Menu");
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    addMenuItem();
-                    break;
-                case 2:
-                    removeMenuItem();
-                    break;
-                case 3:
-                    updateMenuItemPrice();
-                    break;
-                case 4:
-                    saveMenu();
-                    System.out.println("Menu changes saved.");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        } while (choice != 4);
-    }
-
     public static void addMenuItem() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the name of the new menu item: ");
@@ -274,6 +262,9 @@ public class RestaurantOS {
 
         MenuItem newItem = new MenuItem(name, price);
         menu.add(newItem);
+
+        // Save the updated menu to the file
+        saveMenu();
 
         System.out.println("Menu item added successfully.");
     }
@@ -286,6 +277,10 @@ public class RestaurantOS {
 
         if (choice >= 1 && choice <= menu.size()) {
             menu.remove(choice - 1);
+
+            // Save the updated menu to the file
+            saveMenu();
+
             System.out.println("Menu item removed successfully.");
         } else {
             System.out.println("Invalid choice. Please try again.");
@@ -303,13 +298,13 @@ public class RestaurantOS {
             System.out.print("Enter the new price: ");
             double newPrice = scanner.nextDouble();
             itemToUpdate.setPrice(newPrice);
+
+            // Save the updated menu to the file
+            saveMenu();
+
             System.out.println("Menu item price updated successfully.");
         } else {
             System.out.println("Invalid choice. Please try again.");
         }
     }
-
-    // Additional features can be added here
-
-    // For example, you can implement order cancellation, order status updates, etc.
 }
