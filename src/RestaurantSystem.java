@@ -21,20 +21,20 @@ public class RestaurantSystem {
     }
 
     public static void initializeMenu() {
-        menu.add(new MenuItem("\tBurger", 5.99));
-        menu.add(new MenuItem("\tPizza", 8.99));
-        menu.add(new MenuItem("\tSalad", 3.99));
-        menu.add(new MenuItem("\tFries", 2.99));
-        menu.add(new MenuItem("\tSoda", 1.99));
-        menu.add(new MenuItem("\tWater", 0.99));
-        menu.add(new MenuItem("\tCoke", 1.99));
-        menu.add(new MenuItem("\tSprite", 1.99));
-        menu.add(new MenuItem("\tCoffee", 1.99));
-        menu.add(new MenuItem("\tTea", 1.99));
-        menu.add(new MenuItem("\tCappuccino", 1.99));
-        menu.add(new MenuItem("\tLatte", 1.99));
-        menu.add(new MenuItem("\tMacchiato", 1.99));
-        menu.add(new MenuItem("\tEspresso", 1.99));
+        menu.add(new MenuItem("Burger", 5.99));
+        menu.add(new MenuItem("Pizza", 8.99));
+        menu.add(new MenuItem("Salad", 3.99));
+        menu.add(new MenuItem("Fries", 2.99));
+        menu.add(new MenuItem("Soda", 1.99));
+        menu.add(new MenuItem("Water", 0.99));
+        menu.add(new MenuItem("Coke", 1.99));
+        menu.add(new MenuItem("Sprite", 1.99));
+        menu.add(new MenuItem("Coffee", 1.99));
+        menu.add(new MenuItem("Tea", 1.99));
+        menu.add(new MenuItem("Cappuccino", 1.99));
+        menu.add(new MenuItem("Latte", 1.99));
+        menu.add(new MenuItem("Macchiato", 1.99));
+        menu.add(new MenuItem("Espresso", 1.99));
     }
 
     public static void showWelcomeMenu() {
@@ -43,10 +43,10 @@ public class RestaurantSystem {
 
         do {
             System.out.println("Welcome to the Restaurant Ordering System!\n");
-            System.out.println("1. Login");
-            System.out.println("2. Sign Up");
-            System.out.println("3. Exit");
-            System.out.print("Enter your choice: \n");
+            System.out.println("\t1. Login");
+            System.out.println("\t2. Sign Up");
+            System.out.println("\t3. Exit\n");
+            System.out.print("Enter your choice: ");
             choice = userInput.nextInt();
 
             switch (choice) {
@@ -83,7 +83,7 @@ public class RestaurantSystem {
 
         for (User user : users) {
             if (user.username.equals(username) && user.password.equals(password)) {
-                System.out.println("Login successful! Welcome, " + user.username + "!");
+                System.out.println("Login successful! Welcome, " + user.username + "!\n");
                 return user;
             }
         }
@@ -158,7 +158,7 @@ public class RestaurantSystem {
         System.out.println("\nDisplaying Menu Items:\n");
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.get(i);
-            System.out.println((i + 1) + ". " + item.getName() + " - $" + item.getPrice());
+            System.out.println("\t" + (i + 1) + ". " + item.getName() + " - $" + item.getPrice());
         }
     }
 
@@ -181,7 +181,7 @@ public class RestaurantSystem {
                 OrderItem orderItem = new OrderItem(selectedMenuItem, quantity);
                 order.addItem(orderItem);
 
-                System.out.println("\nItem added to order.\n");
+                System.out.println("\nItem added to OrderCart.\n");
 
                 // Print the order item details
                 System.out.println("Item: " + orderItem.menuItem.getName());
