@@ -1,10 +1,4 @@
 
-record MenuItem(String name, double price) {
-}
-
-// Or,
-
-/*
 class MenuItem {
     private final String name;
     private final double price;
@@ -21,4 +15,4 @@ class MenuItem {
     public double getPrice() {
         return price;
     }
-}*/
+}
