@@ -103,6 +103,9 @@ public class RestaurantSystem {
         User newUser = new User(username, password);
         users.add(newUser);
 
+        // Save the updated users to the file
+        saveUsers();
+
         System.out.println("Registration successful!");
     }
 
