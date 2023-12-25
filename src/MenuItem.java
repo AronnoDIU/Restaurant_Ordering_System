@@ -3,8 +3,8 @@ import java.io.Serial;
 class MenuItem implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final String name;
-    private double price;
+    private final String name; // The name of the menu item
+    private double price; // The price of the menu item
 
     public MenuItem(String name, double price) {
         this.name = name;

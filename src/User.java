@@ -1,6 +1,6 @@
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serial; // For serializing and deserializing objects to and from files
+import java.util.ArrayList; // For storing menu items, users, and orders
+import java.util.List; // For storing menu items, users, and orders
 
 class User implements java.io.Serializable {
     @Serial
