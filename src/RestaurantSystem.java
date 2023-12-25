@@ -67,11 +67,12 @@ public class RestaurantSystem {
                     break;
                 case 3:
                     System.out.println("Exiting the system. Goodbye!");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 3);
+        } while (true);
     }
 
     static User login() {
@@ -113,12 +114,12 @@ public class RestaurantSystem {
             System.out.println("What would you like to do?\n");
             System.out.println("\t1. Display Menu Items");
             System.out.println("\t2. Place Order");
-            System.out.println("\t3. View Order History");
-            System.out.println("\t4. Add/Remove/Update Menu Items");
-            System.out.println("\t5. Remove Menu Item");
-            System.out.println("\t6. Update Menu Item Price");
-            System.out.println("\t7. Back to Main Menu");
-            System.out.println("\t8. Exit\n");
+            System.out.println("\t3. Cancel Order");
+            System.out.println("\t4. View Order History");
+            System.out.println("\t5. Add/Remove/Update Menu Items");
+            System.out.println("\t6. Remove Menu Item");
+            System.out.println("\t7. Update Menu Item Price");
+            System.out.println("\t8. Back to Main Menu\n");
             System.out.print("Enter your choice: ");
             choice = userInput.nextInt();
 
@@ -130,19 +131,19 @@ public class RestaurantSystem {
                     placeOrder();
                     break;
                 case 3:
-                    viewOrderHistory();
+                    cancelOrder();
                     break;
                 case 4:
-                    addMenuItem();
+                    viewOrderHistory();
                     break;
                 case 5:
-                    removeMenuItem();
+                    addMenuItem();
                     break;
                 case 6:
-                    updateMenuItemPrice();
+                    removeMenuItem();
                     break;
                 case 7:
-                    showWelcomeMenu();
+                    updateMenuItemPrice();
                     break;
                 case 8:
                     System.out.println("Exiting the system. Goodbye!");
@@ -151,7 +152,24 @@ public class RestaurantSystem {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 4);
+        } while (choice != 8);
+    }
+
+    private static void cancelOrder() {
+        Scanner userInput = new Scanner(System.in);
+        System.out.print("Enter the order ID to cancel: ");
+        int orderId = userInput.nextInt();
+
+        for (Order order : orders) {
+            if (order.orderId == orderId) {
+                orders.remove(order);
+                currentUser.orders.remove(order);
+                System.out.println("Order cancelled successfully.");
+                return;
+            }
+        }
+
+        System.out.println("Order not found.");
     }
 
     public static void displayMenu() {
