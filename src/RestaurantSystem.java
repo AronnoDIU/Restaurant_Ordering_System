@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Logger;
+import java.util.logging.Logger; // For logging errors and warnings to the console
 
 public class RestaurantSystem {
     private static final Logger logger = Logger.getLogger(RestaurantSystem.class.getName());
@@ -21,20 +21,20 @@ public class RestaurantSystem {
     }
 
     public static void initializeMenu() {
-        menu.add(new MenuItem("Burger", 5.99));
-        menu.add(new MenuItem("Pizza", 8.99));
-        menu.add(new MenuItem("Salad", 3.99));
-        menu.add(new MenuItem("Fries", 2.99));
-        menu.add(new MenuItem("Soda", 1.99));
-        menu.add(new MenuItem("Water", 0.99));
-        menu.add(new MenuItem("Coke", 1.99));
-        menu.add(new MenuItem("Sprite", 1.99));
-        menu.add(new MenuItem("Coffee", 1.99));
-        menu.add(new MenuItem("Tea", 1.99));
-        menu.add(new MenuItem("Cappuccino", 1.99));
-        menu.add(new MenuItem("Latte", 1.99));
-        menu.add(new MenuItem("Macchiato", 1.99));
-        menu.add(new MenuItem("Espresso", 1.99));
+        menu.add(new MenuItem("\tBurger", 5.99));
+        menu.add(new MenuItem("\tPizza", 8.99));
+        menu.add(new MenuItem("\tSalad", 3.99));
+        menu.add(new MenuItem("\tFries", 2.99));
+        menu.add(new MenuItem("\tSoda", 1.99));
+        menu.add(new MenuItem("\tWater", 0.99));
+        menu.add(new MenuItem("\tCoke", 1.99));
+        menu.add(new MenuItem("\tSprite", 1.99));
+        menu.add(new MenuItem("\tCoffee", 1.99));
+        menu.add(new MenuItem("\tTea", 1.99));
+        menu.add(new MenuItem("\tCappuccino", 1.99));
+        menu.add(new MenuItem("\tLatte", 1.99));
+        menu.add(new MenuItem("\tMacchiato", 1.99));
+        menu.add(new MenuItem("\tEspresso", 1.99));
     }
 
     public static void showWelcomeMenu() {
@@ -42,11 +42,11 @@ public class RestaurantSystem {
         int choice;
 
         do {
-            System.out.println("Welcome to the Restaurant Ordering System!");
+            System.out.println("Welcome to the Restaurant Ordering System!\n");
             System.out.println("1. Login");
             System.out.println("2. Sign Up");
             System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.print("Enter your choice: \n");
             choice = userInput.nextInt();
 
             switch (choice) {
@@ -54,6 +54,10 @@ public class RestaurantSystem {
                     currentUser = login();
                     if (currentUser != null) {
                         showMainMenu();
+                        saveUsers();
+                        saveOrders();
+                        saveMenu();
+                        currentUser = null;
                     } else {
                         System.out.println("Login failed. Please try again.");
                     }
@@ -106,15 +110,15 @@ public class RestaurantSystem {
         int choice;
 
         do {
-            System.out.println("Welcome to the Restaurant Ordering System! What would you like to do?");
-            System.out.println("1. Display Menu Items");
-            System.out.println("2. Place Order");
-            System.out.println("3. View Order History");
-            System.out.println("4. Add/Remove/Update Menu Items");
-            System.out.println("5. Remove Menu Item");
-            System.out.println("6. Update Menu Item Price");
-            System.out.println("7. Back to Main Menu");
-            System.out.println("8. Exit");
+            System.out.println("What would you like to do?\n");
+            System.out.println("\t1. Display Menu Items");
+            System.out.println("\t2. Place Order");
+            System.out.println("\t3. View Order History");
+            System.out.println("\t4. Add/Remove/Update Menu Items");
+            System.out.println("\t5. Remove Menu Item");
+            System.out.println("\t6. Update Menu Item Price");
+            System.out.println("\t7. Back to Main Menu");
+            System.out.println("\t8. Exit\n");
             System.out.print("Enter your choice: ");
             choice = userInput.nextInt();
 
@@ -142,6 +146,7 @@ public class RestaurantSystem {
                     break;
                 case 8:
                     System.out.println("Exiting the system. Goodbye!");
+                    showWelcomeMenu();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -150,7 +155,7 @@ public class RestaurantSystem {
     }
 
     public static void displayMenu() {
-        System.out.println("Menu:");
+        System.out.println("\nDisplaying Menu Items:\n");
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.get(i);
             System.out.println((i + 1) + ". " + item.getName() + " - $" + item.getPrice());
@@ -164,7 +169,7 @@ public class RestaurantSystem {
 
         do {
             displayMenu();
-            System.out.print("Enter the item number to add to your order (0 to finish): ");
+            System.out.print("\nEnter the item number to add to your order (0 to finish): ");
             choice = userInput.nextInt();
 
             if (choice >= 1 && choice <= menu.size()) {
@@ -181,12 +186,12 @@ public class RestaurantSystem {
                 // Print the order item details
                 System.out.println("Item: " + orderItem.menuItem.getName());
                 System.out.println("Quantity: " + orderItem.quantity);
-                System.out.println("Total: $" + orderItem.getTotal());
+                System.out.println("Total: $" + orderItem.getTotal() + "\n");
 
                 System.out.print("Add a note to this item (optional): ");
                 orderItem.note = userInput.nextLine();
 
-                System.out.println("Note added to item.");
+                System.out.println("Note added to item.\n");
 
                 System.out.println("Do you want to add another item to your order? (y/n)");
                 String addAnother = userInput.nextLine();
@@ -210,7 +215,7 @@ public class RestaurantSystem {
         currentUser.orders.add(order);
 
         // Print the order details
-        System.out.println("Order ID: " + order.orderId);
+        System.out.println("Order ID: " + order.orderId + "\n");
         for (OrderItem item : order.items) {
             System.out.println(item.quantity + "x " +
                     item.menuItem.getName() + " - $" + item.getTotal());
@@ -219,7 +224,16 @@ public class RestaurantSystem {
 
         saveOrders();
         saveUsers();
-        System.out.println("Order placed successfully!");
+        System.out.println("Order placed successfully!\n");
+
+        System.out.println("Do you want to place another order? (y/n)");
+        String placeAnother = userInput.nextLine();
+
+        if (placeAnother.equals("y")) {
+            placeOrder();
+        } else {
+            showMainMenu();
+        }
     }
 
     public static void viewOrderHistory() {
@@ -243,7 +257,7 @@ public class RestaurantSystem {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(MENU_FILE))) {
             oos.writeObject(menu);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Error saving menu: " + e.getMessage());
         }
     }
 
@@ -251,17 +265,21 @@ public class RestaurantSystem {
     public static void loadMenu() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(MENU_FILE))) {
             menu = (ArrayList<MenuItem>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            logger.warning("Menu file not found. Initializing menu.");
+            initializeMenu();
         } catch (IOException | ClassNotFoundException e) {
-            // Handle exceptions or initialize a menu if the file is not found
+            logger.severe("Error loading menu: " + e.getMessage());
             initializeMenu();
         }
     }
+
 
     public static void saveUsers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USERS_FILE))) {
             oos.writeObject(users);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Error saving users: " + e.getMessage());
         }
     }
 
@@ -270,6 +288,7 @@ public class RestaurantSystem {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(USERS_FILE))) {
             users = (ArrayList<User>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
+            logger.warning("Error loading users: " + e.getMessage());
             // Handle exceptions or initialize users if the file is not found
         }
     }
@@ -278,7 +297,7 @@ public class RestaurantSystem {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ORDERS_FILE))) {
             oos.writeObject(orders);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Error saving orders: " + e.getMessage());
         }
     }
 
@@ -287,6 +306,7 @@ public class RestaurantSystem {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ORDERS_FILE))) {
             orders = (ArrayList<Order>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
+            logger.warning("Error loading orders: " + e.getMessage());
             // Handle exceptions or initialize orders if the file is not found
         }
     }
