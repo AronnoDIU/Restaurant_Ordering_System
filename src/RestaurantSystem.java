@@ -1,8 +1,10 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class RestaurantSystem {
+    private static final Logger logger = Logger.getLogger(RestaurantSystem.class.getName());
     static ArrayList<MenuItem> menu = new ArrayList<>();
     static ArrayList<User> users = new ArrayList<>();
     static ArrayList<Order> orders = new ArrayList<>();
@@ -36,7 +38,7 @@ public class RestaurantSystem {
     }
 
     public static void showWelcomeMenu() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         int choice;
 
         do {
@@ -45,7 +47,7 @@ public class RestaurantSystem {
             System.out.println("2. Sign Up");
             System.out.println("3. Exit");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
+            choice = userInput.nextInt();
 
             switch (choice) {
                 case 1:
@@ -69,11 +71,11 @@ public class RestaurantSystem {
     }
 
     static User login() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         System.out.print("Enter username: ");
-        String username = scanner.next();
+        String username = userInput.next();
         System.out.print("Enter password: ");
-        String password = scanner.next();
+        String password = userInput.next();
 
         for (User user : users) {
             if (user.username.equals(username) && user.password.equals(password)) {
@@ -87,11 +89,11 @@ public class RestaurantSystem {
     }
 
     public static void signUp() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         System.out.print("Enter username: ");
-        String username = scanner.next();
+        String username = userInput.next();
         System.out.print("Enter password: ");
-        String password = scanner.next();
+        String password = userInput.next();
 
         User newUser = new User(username, password);
         users.add(newUser);
@@ -100,7 +102,7 @@ public class RestaurantSystem {
     }
 
     public static void showMainMenu() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         int choice;
 
         do {
@@ -114,7 +116,7 @@ public class RestaurantSystem {
             System.out.println("7. Back to Main Menu");
             System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
+            choice = userInput.nextInt();
 
             switch (choice) {
                 case 1:
@@ -156,25 +158,25 @@ public class RestaurantSystem {
     }
 
     public static void placeOrder() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         Order order = new Order();
         int choice;
 
         do {
             displayMenu();
             System.out.print("Enter the item number to add to your order (0 to finish): ");
-            choice = scanner.nextInt();
+            choice = userInput.nextInt();
 
             if (choice >= 1 && choice <= menu.size()) {
                 MenuItem selectedMenuItem = menu.get(choice - 1);
 
                 System.out.print("Enter quantity: ");
-                int quantity = scanner.nextInt();
+                int quantity = userInput.nextInt();
 
                 OrderItem orderItem = new OrderItem(selectedMenuItem, quantity);
                 order.addItem(orderItem);
 
-                System.out.println("Item added to order.");
+                System.out.println("\nItem added to order.\n");
 
                 // Print the order item details
                 System.out.println("Item: " + orderItem.menuItem.getName());
@@ -182,12 +184,12 @@ public class RestaurantSystem {
                 System.out.println("Total: $" + orderItem.getTotal());
 
                 System.out.print("Add a note to this item (optional): ");
-                orderItem.note = scanner.nextLine();
+                orderItem.note = userInput.nextLine();
 
                 System.out.println("Note added to item.");
 
                 System.out.println("Do you want to add another item to your order? (y/n)");
-                String addAnother = scanner.nextLine();
+                String addAnother = userInput.nextLine();
 
                 if (addAnother.equals("y")) {
                     choice = -1;
@@ -290,11 +292,11 @@ public class RestaurantSystem {
     }
 
     public static void addMenuItem() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         System.out.print("Enter the name of the new menu item: ");
-        String name = scanner.nextLine();
+        String name = userInput.nextLine();
         System.out.print("Enter the price of the new menu item: ");
-        double price = scanner.nextDouble();
+        double price = userInput.nextDouble();
 
         MenuItem newItem = new MenuItem(name, price);
         menu.add(newItem);
@@ -307,9 +309,9 @@ public class RestaurantSystem {
 
     public static void removeMenuItem() {
         displayMenu();
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         System.out.print("Enter the number of the item to remove: ");
-        int choice = scanner.nextInt();
+        int choice = userInput.nextInt();
 
         if (choice >= 1 && choice <= menu.size()) {
             menu.remove(choice - 1);
@@ -325,14 +327,14 @@ public class RestaurantSystem {
 
     public static void updateMenuItemPrice() {
         displayMenu();
-        Scanner scanner = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         System.out.print("Enter the number of the item to update: ");
-        int choice = scanner.nextInt();
+        int choice = userInput.nextInt();
 
         if (choice >= 1 && choice <= menu.size()) {
             MenuItem itemToUpdate = menu.get(choice - 1);
             System.out.print("Enter the new price: ");
-            double newPrice = scanner.nextDouble();
+            double newPrice = userInput.nextDouble();
             itemToUpdate.setPrice(newPrice);
 
             // Save the updated menu to the file
