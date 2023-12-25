@@ -1,5 +1,8 @@
+import java.io.Serial;
 
-class MenuItem {
+class MenuItem implements java.io.Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String name;
     private double price;
 

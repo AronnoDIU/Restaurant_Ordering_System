@@ -52,6 +52,8 @@ public class RestaurantSystem {
                     currentUser = login();
                     if (currentUser != null) {
                         showMainMenu();
+                    } else {
+                        System.out.println("Login failed. Please try again.");
                     }
                     break;
                 case 2:
@@ -171,13 +173,47 @@ public class RestaurantSystem {
 
                 OrderItem orderItem = new OrderItem(selectedMenuItem, quantity);
                 order.addItem(orderItem);
-            } else if (choice != 0) {
+
+                System.out.println("Item added to order.");
+
+                // Print the order item details
+                System.out.println("Item: " + orderItem.menuItem.getName());
+                System.out.println("Quantity: " + orderItem.quantity);
+                System.out.println("Total: $" + orderItem.getTotal());
+
+                System.out.print("Add a note to this item (optional): ");
+                orderItem.note = scanner.nextLine();
+
+                System.out.println("Note added to item.");
+
+                System.out.println("Do you want to add another item to your order? (y/n)");
+                String addAnother = scanner.nextLine();
+
+                if (addAnother.equals("y")) {
+                    choice = -1;
+                } else {
+                    choice = 0;
+                }
+            } else if (choice == 0) {
+                if (order.items.isEmpty()) {
+                    System.out.println("You must add at least one item to your order.");
+                    choice = -1;
+                }
+            } else {
                 System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 0);
 
         orders.add(order);
         currentUser.orders.add(order);
+
+        // Print the order details
+        System.out.println("Order ID: " + order.orderId);
+        for (OrderItem item : order.items) {
+            System.out.println(item.quantity + "x " +
+                    item.menuItem.getName() + " - $" + item.getTotal());
+        }
+        System.out.println("Total: $" + order.calculateTotal());
 
         saveOrders();
         saveUsers();
