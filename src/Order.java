@@ -10,7 +10,7 @@ class Order implements java.io.Serializable {
 
     public Order() {
         this.orderId = orderIdCounter++; // Set the order ID and increment the counter
-        this.items = new ArrayList<>(); // Initialize the item list
+        this.items = new ArrayList<>(); // Initialize the item
     }
 
     // Adds an item to the order list of items
