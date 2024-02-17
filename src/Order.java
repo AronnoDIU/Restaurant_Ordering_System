@@ -13,7 +13,7 @@ class Order implements java.io.Serializable {
         this.items = new ArrayList<>(); // Initialize the item
     }
 
-    // Adds an item to the order list of
+    // Adds an item to the order list
     public void addItem(OrderItem item) {
         items.add(item);
     }
